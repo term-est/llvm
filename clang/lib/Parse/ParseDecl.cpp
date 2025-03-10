@@ -4723,6 +4723,12 @@ void Parser::ParseDeclarationSpecifiers(
     case tok::kw_const:
       isInvalid = DS.SetTypeQual(DeclSpec::TQ_const, Loc, PrevSpec, DiagID,
                                  getLangOpts());
+
+      // check if we previously added TST_auto, if not, add auto
+      if (!DS.hasTypeSpecifier())
+        isInvalid &= DS.SetTypeSpecType(DeclSpec::TST_auto, Loc,
+                                        PrevSpec, DiagID, Policy);
+
       break;
     case tok::kw_volatile:
       isInvalid = DS.SetTypeQual(DeclSpec::TQ_volatile, Loc, PrevSpec, DiagID,

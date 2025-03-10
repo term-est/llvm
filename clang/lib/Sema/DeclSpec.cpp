@@ -865,7 +865,10 @@ bool DeclSpec::SetTypeSpecType(TST T, SourceLocation Loc,
          "rep required for these type-spec kinds!");
   if (TypeSpecType == TST_error)
     return false;
-  if (TypeSpecType != TST_unspecified) {
+
+  bool isConstDeduced = TypeSpecType == TST::TST_auto && TypeQualifiers & TQ_const;
+
+  if (TypeSpecType != TST_unspecified && not isConstDeduced) {
     PrevSpec = DeclSpec::getSpecifierName((TST) TypeSpecType, Policy);
     DiagID = diag::err_invalid_decl_spec_combination;
     return true;
