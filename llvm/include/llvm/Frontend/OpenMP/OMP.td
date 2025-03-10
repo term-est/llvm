@@ -105,6 +105,7 @@ def OMPC_CancellationConstructType : Clause<"cancellation_construct_type"> {
     OMP_CANCELLATION_CONSTRUCT_Taskgroup,
     OMP_CANCELLATION_CONSTRUCT_None
   ];
+  let flangClass = "OmpCancellationConstructTypeClause";
 }
 def OMPC_Contains : Clause<"contains"> {
   let clangClass = "OMPContainsClause";
@@ -647,12 +648,16 @@ def OMP_BeginDeclareVariant : Directive<"begin declare variant"> {
 }
 def OMP_Cancel : Directive<"cancel"> {
   let allowedOnceClauses = [
+    VersionedClause<OMPC_CancellationConstructType>,
     VersionedClause<OMPC_If>,
   ];
   let association = AS_None;
   let category = CA_Executable;
 }
 def OMP_CancellationPoint : Directive<"cancellation point"> {
+  let allowedOnceClauses = [
+    VersionedClause<OMPC_CancellationConstructType>,
+  ];
   let association = AS_None;
   let category = CA_Executable;
 }
@@ -1023,8 +1028,10 @@ def OMP_Single : Directive<"single"> {
     VersionedClause<OMPC_Allocate>,
     VersionedClause<OMPC_CopyPrivate>,
     VersionedClause<OMPC_FirstPrivate>,
-    VersionedClause<OMPC_NoWait>,
     VersionedClause<OMPC_Private>,
+  ];
+  let allowedOnceClauses = [
+    VersionedClause<OMPC_NoWait>,
   ];
   let association = AS_Block;
   let category = CA_Executable;
